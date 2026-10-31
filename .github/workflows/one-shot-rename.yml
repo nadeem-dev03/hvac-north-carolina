@@ -1,0 +1,24 @@
+name: One-shot rename to index.html
+on:
+  push:
+    paths:
+      - .github/workflows/one-shot-rename.yml
+permissions:
+  contents: write
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rename uploaded export to index.html
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mv -f hvac-north-carolina.html index.html
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Rename hvac-north-carolina.html to index.html (new Oct 31 export)"
+            git push
+          fi
